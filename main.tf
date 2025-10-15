@@ -3,15 +3,15 @@
 #########################################################
 
 provider "aws" {
-  region = var.aws_region
-  # profile = "cemewe"  # Uncomment if using named profile
+  region  = var.aws_region
+  profile = "cemewe"
 }
 
 #########################################################
 # Create S3 bucket
 #########################################################
 resource "aws_s3_bucket" "lab1_bucket" {
-  bucket = "lab1-${var.student_name}-bucket"  # unique bucket name
+  bucket = "lab1-${var.student_name}-bucket"
 
   tags = {
     Name  = "lab1-${var.student_name}"
@@ -21,13 +21,46 @@ resource "aws_s3_bucket" "lab1_bucket" {
 }
 
 #########################################################
-# Upload local image to S3 bucket
+# Allow bucket policy to make it public
+#########################################################
+resource "aws_s3_bucket_public_access_block" "lab1_bucket_access" {
+  bucket = aws_s3_bucket.lab1_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = false
+  ignore_public_acls      = true
+  restrict_public_buckets = false
+}
+
+#########################################################
+# Make bucket publicly readable using a bucket policy
+#########################################################
+resource "aws_s3_bucket_policy" "public_access" {
+  bucket = aws_s3_bucket.lab1_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = "*"
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.lab1_bucket.arn}/*"
+      }
+    ]
+  })
+
+  depends_on = [aws_s3_bucket_public_access_block.lab1_bucket_access]
+}
+
+#########################################################
+# Upload local image to S3 bucket (no ACL)
 #########################################################
 resource "aws_s3_object" "lab1_image" {
-  bucket = aws_s3_bucket.lab1_bucket.id   # use .id instead of .bucket
+  bucket = aws_s3_bucket.lab1_bucket.id
   key    = "picture111.jpg"
   source = "picture111.jpg"
-  acl    = "public-read"
+  etag   = filemd5("picture111.jpg")
 }
 
 #########################################################
