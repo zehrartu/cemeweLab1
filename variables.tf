@@ -1,7 +1,7 @@
 variable "student_name" {
   description = "Unique student identifier"
   type        = string
-  default     = "manjithatest2"
+  default     = "manjithatest2" # Change this to your own unique name
 }
 
 variable "aws_region" {
