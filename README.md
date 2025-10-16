@@ -80,7 +80,7 @@ If you want to use different identities for specific projects (for example, one 
 git config user.name "Username"
 git config user.email "email@example.com"
 ```
-## 3. 🧑‍💻 Update Your Student Name
+## 4. 🧑‍💻 Update Your Student Name
 
 Before running Terraform commands, open the `variables.tf` file and update the following variable:
 
@@ -91,7 +91,7 @@ variable "student_name" {
   default     = "test_student1"  # <-- Each student updates this value
 }
 ```
-## 3. 🪜 Step-by-Step Terraform Workflow
+## 5. 🪜 Step-by-Step Terraform Workflow
 
 ### 1. 🧰 Initialize Terraform
 
