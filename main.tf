@@ -4,7 +4,7 @@
 
 provider "aws" {
   region  = var.aws_region
-  profile = "cemewe"
+  #profile = "cemewe"
 }
 
 #########################################################
